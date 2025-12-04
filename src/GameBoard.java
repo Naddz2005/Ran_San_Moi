@@ -26,7 +26,7 @@ public class GameBoard {
         for (int i = 0; i < 5; i++)
             spawnObstacle();
     }
-
+    // Ham lay diem cao nhat duoc luu trong file txt (Chay tot)
     public void loadHighestScore() {
         try {
             File f = new File(SAVE_FILE);
@@ -93,15 +93,18 @@ public class GameBoard {
         for (Obstacle o : obstacles)
             if (head.equals(o)) return false;
 
-        Iterator<Food> it = foodList.iterator();
-        while (it.hasNext()) {
-            Food f = it.next();
-            if (head.equals(f)) {
+        List<Food> toRemove = new ArrayList<>();
+        for(Food f : new ArrayList<>(foodList)) { // Duyet ban sao danh sach
+            if(head.equals(f)) {
+                toRemove.add(f); // Luu phan tu xoa
                 score++;
-                it.remove();
-                spawnFood();
-                snake.move(true);
             }
+        }
+        // Xu li xoa va them sau khi duyet xong
+        for(Food f : toRemove) {
+            foodList.remove(f);
+            spawnFood();
+            snake.move(true);
         }
 
         if (score > highestScore) highestScore = score;

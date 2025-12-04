@@ -4,6 +4,8 @@ public class Game {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
+        InputHandler input = new InputHandler();
+
         while (true) {
             System.out.println("\n===== SNAKE GAME =====");
             System.out.println("1. Start Game");
@@ -31,18 +33,20 @@ public class Game {
                 }
 
                 long start = System.currentTimeMillis();
-                while (System.currentTimeMillis() - start < 1000) {
-                    if (System.in.available() > 0) {
-                        char c = (char) System.in.read();
 
-                        switch (Character.toLowerCase(c)) {
-                            case 'w' -> gb.getSnake().setDirection(Direction.UP);
-                            case 's' -> gb.getSnake().setDirection(Direction.DOWN);
-                            case 'a' -> gb.getSnake().setDirection(Direction.LEFT);
-                            case 'd' -> gb.getSnake().setDirection(Direction.RIGHT);
-                            case 'p' -> paused = true;
-                            case 'r' -> paused = false;
-                        }
+                while (System.currentTimeMillis() - start < 500) {
+                    int key = input.readKeyNonBlocking();   // đọc phím không block
+                    if (key == -1) continue;               // không có phím thì bỏ qua
+
+                    char c = Character.toLowerCase((char) key);
+
+                    switch (c) {
+                        case 'w' -> gb.getSnake().setDirection(Direction.UP);
+                        case 's' -> gb.getSnake().setDirection(Direction.DOWN);
+                        case 'a' -> gb.getSnake().setDirection(Direction.LEFT);
+                        case 'd' -> gb.getSnake().setDirection(Direction.RIGHT);
+                        case 'p' -> paused = true;
+                        case 'r' -> paused = false;
                     }
                 }
 

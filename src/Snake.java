@@ -41,6 +41,7 @@ public class Snake {
         }
     }
 
+    // Ham xu ly tu va cham
     public boolean isSelfCollide() {
         Point head = getHead();
         for(int i = 1; i < body.size(); i++) {
