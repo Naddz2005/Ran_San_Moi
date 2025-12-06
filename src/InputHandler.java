@@ -6,6 +6,7 @@ public class InputHandler {
 
     private final Terminal terminal;
     private final NonBlockingReader reader;
+    private volatile boolean running = true;
 
     public InputHandler() throws Exception {
         terminal = TerminalBuilder.builder()
@@ -23,5 +24,8 @@ public class InputHandler {
      */
     public int readKeyNonBlocking() throws Exception {
         return reader.read(10); // timeout 10ms → không block
+    }
+    public void stopListening() {
+        running = false;
     }
 }

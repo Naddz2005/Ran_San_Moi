@@ -1,10 +1,11 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Game {
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
 
-        InputHandler input = new InputHandler();
+//        InputHandler input = new InputHandler();
 
         while (true) {
             System.out.println("\n===== SNAKE GAME =====");
@@ -15,9 +16,9 @@ public class Game {
 
             if (choice == 2) {
                 System.out.println("Bye!");
+                sc.close();
                 return;
             }
-
             GameBoard gb = new GameBoard(40, 20);
 
             System.out.println("W/A/S/D to move | P = pause | R = resume");
@@ -35,18 +36,17 @@ public class Game {
                 long start = System.currentTimeMillis();
 
                 while (System.currentTimeMillis() - start < 500) {
-                    int key = input.readKeyNonBlocking();   // đọc phím không block
-                    if (key == -1) continue;               // không có phím thì bỏ qua
+                    if (System.in.available() > 0) {
+                        char c = (char) System.in.read();
 
-                    char c = Character.toLowerCase((char) key);
-
-                    switch (c) {
-                        case 'w' -> gb.getSnake().setDirection(Direction.UP);
-                        case 's' -> gb.getSnake().setDirection(Direction.DOWN);
-                        case 'a' -> gb.getSnake().setDirection(Direction.LEFT);
-                        case 'd' -> gb.getSnake().setDirection(Direction.RIGHT);
-                        case 'p' -> paused = true;
-                        case 'r' -> paused = false;
+                        switch (Character.toLowerCase(c)) {
+                            case 'w' -> gb.getSnake().setDirection(Direction.UP);
+                            case 's' -> gb.getSnake().setDirection(Direction.DOWN);
+                            case 'a' -> gb.getSnake().setDirection(Direction.LEFT);
+                            case 'd' -> gb.getSnake().setDirection(Direction.RIGHT);
+                            case 'p' -> paused = true;
+                            case 'r' -> paused = false;
+                        }
                     }
                 }
 

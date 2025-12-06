@@ -10,7 +10,6 @@ public class GameBoard {
     private int score = 0;
     private int highestScore = 0;
     private final String SAVE_FILE = "highest_score.txt";
-
     public GameBoard(int width, int height) {
         this.width = width;
         this.height = height;
@@ -41,6 +40,10 @@ public class GameBoard {
         try (PrintWriter pw = new PrintWriter(new FileWriter(SAVE_FILE))) {
             pw.println(highestScore);
         } catch (Exception ignored) {}
+    }
+
+    public boolean checkMaxLenghtSnake() {
+        return score == ((width - 2) * (height - 2) -7) ? true : false;
     }
 
     private void spawnFood() {
@@ -93,18 +96,21 @@ public class GameBoard {
         for (Obstacle o : obstacles)
             if (head.equals(o)) return false;
 
-        List<Food> toRemove = new ArrayList<>();
-        for(Food f : new ArrayList<>(foodList)) { // Duyet ban sao danh sach
-            if(head.equals(f)) {
-                toRemove.add(f); // Luu phan tu xoa
-                score++;
+        //
+        if(!checkMaxLenghtSnake()) {
+            List<Food> toRemove = new ArrayList<>();
+            for(Food f : new ArrayList<>(foodList)) { // Duyet ban sao danh sach
+                if(head.equals(f)) {
+                    toRemove.add(f); // Luu phan tu xoa
+                    score++;
+                }
             }
-        }
-        // Xu li xoa va them sau khi duyet xong
-        for(Food f : toRemove) {
-            foodList.remove(f);
-            spawnFood();
-            snake.move(true);
+            // Xu li xoa va them sau khi duyet xong
+            for(Food f : toRemove) {
+                foodList.remove(f);
+                spawnFood();
+                snake.move(true);
+            }
         }
 
         if (score > highestScore) highestScore = score;
